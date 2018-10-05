@@ -8,6 +8,7 @@
             <span> <%= blog.created %> </span>
             <p><%= blog.body.substring(0, 100) %>...</p>
             <a class="violet basic button" href="/blogs/<%= blog._id %>">Read more</a>
+            <a class="violet basic button" href="/blogs/<%= blog._id %>/edit">Edit blog</a>
         </div>
     <% }) %>
 </div>

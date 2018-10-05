@@ -1,4 +1,5 @@
-var     express         = require("express"),
+var     express         = require("express"),   
+        methodOverride  = require("method-override"),
         bodyParser      = require("body-parser"),
         mongoose        = require("mongoose"),
         app             = express();
@@ -58,6 +59,22 @@ app.get("/blogs/:id", function(req, res) {
     });
 });
 
+//Edit a blog
+app.get("/blogs/:id/edit", function(req, res){
+    findById(req.params.id, function(err, blog){
+        if(!err){
+            res.render("editblog", {blog:blog});
+        }else{
+            res.redirect("/blogs");
+        }
+    });
+})
+
+//update route
+app.put('/blogs/:id', function(req, res){
+    res.send("NOSSA UAU");
+})
+
 
 //DATABASE OPERATIONS
 
@@ -94,6 +111,9 @@ function findById(id, callBack){
         callBack(err, blog);
     })
 }
+
+
+
 
 
 
