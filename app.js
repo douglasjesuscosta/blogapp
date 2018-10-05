@@ -21,8 +21,9 @@ var blogSchema = new mongoose.Schema({
 var Blog = mongoose.model("Blog", blogSchema);
 
 
-//Restfull rotes
+//RESTFULL ROTES
 
+//Index Rote
 app.get("/", function(req, res) {
     res.redirect("/blogs")
 })
@@ -33,7 +34,32 @@ app.get("/blogs", function(req, res){
     });
 })
 
-//Database consulting
+//New rote
+app.get("/blogs/new", function(req, res) {
+    res.render("newblog")
+})
+
+app.post("/blogs", function(req, res){
+    insertBlog(req.body.blog, function(newBlog){
+        console.log("Inserted: " + newBlog);
+        res.redirect("/blogs");
+    })
+})
+
+//Show a specific blog
+
+app.get("/blogs/:id", function(req, res) {
+    findById(req.params.id, function(err, blog){
+        if(!err){
+            res.render("showblog.ejs", {blog:blog});
+        }else{
+            res.redirect("/blogs");
+        }
+    });
+});
+
+
+//DATABASE OPERATIONS
 
 function findAllBlogs(callBack){
     Blog.find({}, function(err, blogs){
@@ -43,6 +69,32 @@ function findAllBlogs(callBack){
         callBack(blogs);
     })
 }
+
+//Databate create new blog
+
+function insertBlog(newblog, callBack){
+    console.log(newblog);
+    
+    Blog.create(newblog, function(err, newblog){
+        if(err){
+            console.log("Operation failed: " + err);
+        }
+        callBack(newblog);
+    });
+}
+
+
+
+//Consult a post with a given id
+function findById(id, callBack){
+    Blog.findById(id, function(err, blog){
+        if(err){
+            console.log("Operation failed: " + err);
+        }
+        callBack(err, blog);
+    })
+}
+
 
 
 //Initialization of server
